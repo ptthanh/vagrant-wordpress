@@ -127,12 +127,13 @@ fi
 if [ ! -d "/var/www/html/wp-content/themes" ]; then
 	echo -e "\n---  Installing Wordpress Core  ---\n"
 	sudo chown -R vagrant:vagrant /var/www/html/
-	cd /var/www/html/
-
-	(cd /var/www/html/ && sudo -u vagrant -i -- wp core download)
-	sudo -u vagrant -i -- wp core config --dbuser=root --dbpass="$DBPASSWD" --dbname="$WP_DBNAME"
-	sudo -u vagrant -i -- wp db create
-	(cd /var/www/html/ && sudo -u vagrant -i -- wp core install --url="$WP_URL" --title=Internship --admin_user="$WP_AD_NAME" --admin_password="$WP_AD_PASSWD" --admin_email="$WP_AD_EMAIL")
+	sudo -u vagrant bash <<-EOF
+		cd /var/www/html/ && pwd;
+		wp core download
+		wp core config --dbuser=root --dbpass="$DBPASSWD" --dbname="$WP_DBNAME"
+		wp db create
+		wp core install --url="$WP_URL" --title=Internship --admin_user="$WP_AD_NAME" --admin_password="$WP_AD_PASSWD" --admin_email="$WP_AD_EMAIL"
+	EOF
 
 	cd -
 	echo -e "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
